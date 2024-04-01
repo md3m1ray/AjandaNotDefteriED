@@ -80,10 +80,12 @@ class AyarlarPenceresi:
                             file_content = base64.b64decode(file_content_b64)
                             file_name = file["path"]
                             file_path = os.path.join(os.getcwd(), file_name)
-                            with open(file_path, "wb") as f:
-                                f.write(file_content)
-                            # Kullanıcıya dosyanın başarıyla indirildiğini bildirin
-                            messagebox.showinfo("Güncelleme", "Uygulama başarıyla güncellendi! Lütfen Yeniden Başlatın")
+                            # Dosyanın içeriğini kontrol edin
+                            if not os.path.exists(file_path) or file_content != open(file_path, "rb").read():
+                                with open(file_path, "wb") as f:
+                                    f.write(file_content)
+                                # Kullanıcıya dosyanın başarıyla indirildiğini bildirin
+                                messagebox.showinfo("Güncelleme", "Uygulama başarıyla güncellendi! Lütfen Yeniden Başlatın")
 
                         else:
                             print("Dosya indirme hatası:", response.status_code)

@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc1e74d8-2597-4519-8167-7ea612cf090e" name="Changes" comment="Git API Completed">
+    <list default="true" id="fc1e74d8-2597-4519-8167-7ea612cf090e" name="Changes" comment="Git API Revised">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -118,12 +119,21 @@
       <option name="project" value="LOCAL" />
       <updated>1711999705084</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Git API Revised">
+      <option name="closed" value="true" />
+      <created>1712000178289</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1712000178289</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="App Completed" />
     <MESSAGE value="Git API Completed" />
-    <option name="LAST_COMMIT_MESSAGE" value="Git API Completed" />
+    <MESSAGE value="Git API Revised" />
+    <option name="LAST_COMMIT_MESSAGE" value="Git API Revised" />
   </component>
 </project>
