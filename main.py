@@ -3,6 +3,8 @@ from tkinter import messagebox, Scrollbar
 from tkcalendar import Calendar
 import sqlite3
 import os
+import requests
+import base64
 
 
 class AyarlarPenceresi:
@@ -28,6 +30,10 @@ class AyarlarPenceresi:
         self.buton_kaydet = tk.Button(self.ayarlar_penceresi, text="Kaydet", command=self.sifre_degistir, font=("Helvetica", 11))
         self.buton_kaydet.grid(row=2, column=0, columnspan=2)
 
+        self.buton_kaydet = tk.Button(self.ayarlar_penceresi, text="Güncelle", command=self.githubdan_guncelle,
+                                      font=("Helvetica", 11))
+        self.buton_kaydet.grid(row=4, column=0, columnspan=2)
+
     def sifre_degistir(self):
         eski_sifre = self.entry_eski_sifre.get()
         yeni_sifre = self.entry_yeni_sifre.get()
@@ -41,6 +47,42 @@ class AyarlarPenceresi:
             self.ayarlar_penceresi.destroy()
         else:
             messagebox.showerror("Hata", "Mevcut şifreyi yanlış girdiniz.")
+
+
+    def githubdan_guncelle(self):
+        # GitHub API'si aracılığıyla kod deposundan en son sürümü almak için istek gönder
+        user = "md3m1ray"  # GitHub kullanıcı adınızı buraya girin
+        repo = "AjandaNotDefteriED"  # GitHub deposunun adını buraya girin
+        branch = "master"  # Varsayılan olarak ana dal kullanılır, gerektiğinde değiştirin
+        url = f"https://api.github.com/repos/{user}/{repo}/git/refs/heads/{branch}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            # API yanıtını analiz ederek en son commit'in SHA'sını alın
+            latest_commit_sha = response.json()["object"]["sha"]
+
+            # GitHub'dan bu commit'in ağacını alın
+            url = f"https://api.github.com/repos/{user}/{repo}/git/trees/{latest_commit_sha}?recursive=1"
+            response = requests.get(url)
+            if response.status_code == 200:
+                # API yanıtını analiz ederek dosyaları alın
+                files = response.json()["tree"]
+                for file in files:
+                    if file["type"] == "blob":  # Sadece dosyaları alın, klasörleri yok sayın
+                        # GitHub'dan dosyayı indirin
+                        url = file["url"]
+                        response = requests.get(url)
+                        if response.status_code == 200:
+                            # Dosyayı yerel olarak kaydedin
+                            file_content_b64 = response.json()["content"]
+                            file_content = base64.b64decode(file_content_b64)
+                            file_name = file["path"]
+                            file_path = os.path.join(os.getcwd(), file_name)
+                            with open(file_path, "wb") as f:
+                                f.write(file_content)
+                        else:
+                            print("Dosya indirme hatası:", response.status_code)
+        else:
+            print("En son commit bilgisi alınamadı:", response.status_code)
 
 
 class AjandaUygulamasi:
