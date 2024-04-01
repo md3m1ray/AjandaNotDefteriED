@@ -56,7 +56,7 @@ class AyarlarPenceresi:
         # GitHub API'si aracılığıyla kod deposundan en son sürümü almak için istek gönder
         user = "md3m1ray"  # GitHub kullanıcı adınızı buraya girin
         repo = "AjandaNotDefteriED"  # GitHub deposunun adını buraya girin
-        branch = "master"  # Varsayılan olarak ana dal kullanılır, gerektiğinde değiştirin
+        branch = "master"  # Varsayılan olarak ana branch kullanılır, gerektiğinde değiştirin
         url = f"https://api.github.com/repos/{user}/{repo}/git/refs/heads/{branch}"
         response = requests.get(url)
         if response.status_code == 200:
@@ -80,17 +80,15 @@ class AyarlarPenceresi:
                             file_content = base64.b64decode(file_content_b64)
                             file_name = file["path"]
                             file_path = os.path.join(os.getcwd(), file_name)
-                            # Dosyanın içeriğini kontrol edin
-                            if not os.path.exists(file_path) or file_content != open(file_path, "rb").read():
-                                with open(file_path, "wb") as f:
-                                    f.write(file_content)
-                                # Kullanıcıya dosyanın başarıyla indirildiğini bildirin
-                                messagebox.showinfo("Güncelleme", "Uygulama başarıyla güncellendi! Lütfen Yeniden Başlatın")
+                            with open(file_path, "wb") as f:
+                                f.write(file_content)
+                            messagebox.showinfo("Güncelleme", f"{file_name} dosyası başarıyla güncellendi!. Lütfen Uygulamayı Yeniden Başlatın.")
 
                         else:
-                            print("Dosya indirme hatası:", response.status_code)
+                            messagebox.showerror("Hata", "Dosya indirme hatası. Daha sonra tekrar deneyiniz")
+
         else:
-            print("En son commit bilgisi alınamadı:", response.status_code)
+            messagebox.showerror("Hata", "En son güncelleme bilgisi alınamadı. Daha sonra tekrar deneyiniz")
 
 
 class AjandaUygulamasi:
