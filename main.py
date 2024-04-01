@@ -15,7 +15,7 @@ class AyarlarPenceresi:
 
         self.ayarlar_penceresi = tk.Toplevel(parent)
         self.ayarlar_penceresi.title("Ayarlar")
-        self.ayarlar_penceresi.geometry("250x100")
+        self.ayarlar_penceresi.geometry("250x150")
 
         self.label_eski_sifre = tk.Label(self.ayarlar_penceresi, text="Mevcut Şifre:", font=("Helvetica", 11))
         self.label_eski_sifre.grid(row=0, column=0)
@@ -30,7 +30,10 @@ class AyarlarPenceresi:
         self.buton_kaydet = tk.Button(self.ayarlar_penceresi, text="Kaydet", command=self.sifre_degistir, font=("Helvetica", 11))
         self.buton_kaydet.grid(row=2, column=0, columnspan=2)
 
-        self.buton_kaydet = tk.Button(self.ayarlar_penceresi, text="Güncelle", command=self.githubdan_guncelle,
+        self.cekirdek_frame = tk.Frame(self.ayarlar_penceresi, height=10, bd=5, relief="sunken")
+        self.cekirdek_frame.grid(row=3, column=0, padx=5, pady=5)
+
+        self.buton_kaydet = tk.Button(self.ayarlar_penceresi, text="Uygumalamayı Güncelle", command=self.githubdan_guncelle,
                                       font=("Helvetica", 11))
         self.buton_kaydet.grid(row=4, column=0, columnspan=2)
 
@@ -79,6 +82,9 @@ class AyarlarPenceresi:
                             file_path = os.path.join(os.getcwd(), file_name)
                             with open(file_path, "wb") as f:
                                 f.write(file_content)
+                            # Kullanıcıya dosyanın başarıyla indirildiğini bildirin
+                            messagebox.showinfo("Güncelleme", "Uygulama başarıyla güncellendi! Lütfen Yeniden Başlatın")
+
                         else:
                             print("Dosya indirme hatası:", response.status_code)
         else:
