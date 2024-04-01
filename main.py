@@ -33,9 +33,9 @@ class AyarlarPenceresi:
         self.cekirdek_frame = tk.Frame(self.ayarlar_penceresi, height=10, bd=5, relief="sunken")
         self.cekirdek_frame.grid(row=3, column=0, padx=5, pady=5)
 
-        self.buton_kaydet = tk.Button(self.ayarlar_penceresi, text="Uygumalamayı Güncelle", command=self.githubdan_guncelle,
+        self.buton_guncelle = tk.Button(self.ayarlar_penceresi, text="Uygumalamayı Güncelle", command=self.githubdan_guncelle,
                                       font=("Helvetica", 11))
-        self.buton_kaydet.grid(row=4, column=0, columnspan=2)
+        self.buton_guncelle.grid(row=4, column=0, columnspan=2)
 
     def sifre_degistir(self):
         eski_sifre = self.entry_eski_sifre.get()
@@ -82,13 +82,14 @@ class AyarlarPenceresi:
                             file_path = os.path.join(os.getcwd(), file_name)
                             with open(file_path, "wb") as f:
                                 f.write(file_content)
-                            messagebox.showinfo("Güncelleme", f"{file_name} dosyası başarıyla güncellendi!. Lütfen Uygulamayı Yeniden Başlatın.")
 
                         else:
                             messagebox.showerror("Hata", "Dosya indirme hatası. Daha sonra tekrar deneyiniz")
 
         else:
             messagebox.showerror("Hata", "En son güncelleme bilgisi alınamadı. Daha sonra tekrar deneyiniz")
+
+        messagebox.showinfo("Güncelleme", "Uygulama başarıyla güncellendi!. Lütfen Uygulamayı Yeniden Başlatın.")
 
 
 class AjandaUygulamasi:
