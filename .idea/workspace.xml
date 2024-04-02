@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc1e74d8-2597-4519-8167-7ea612cf090e" name="Changes" comment="GitHub API Revised">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ajanda.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="fc1e74d8-2597-4519-8167-7ea612cf090e" name="Changes" comment="Mail Sender Add" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -114,7 +110,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712005925226</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Mail Sender Add">
+      <option name="closed" value="true" />
+      <created>1712019967712</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1712019967712</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -122,6 +126,7 @@
     <MESSAGE value="Git API Completed" />
     <MESSAGE value="Git API Revised" />
     <MESSAGE value="GitHub API Revised" />
-    <option name="LAST_COMMIT_MESSAGE" value="GitHub API Revised" />
+    <MESSAGE value="Mail Sender Add" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mail Sender Add" />
   </component>
 </project>

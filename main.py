@@ -285,7 +285,7 @@ class AjandaUygulamasi:
             # E-posta oluşturma
             mail_from = {
                 "name": "Ajanda Not Defteri",
-                "email": "",
+                "email": " ",
             }
             recipients = [
                 {
