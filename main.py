@@ -5,6 +5,7 @@ import sqlite3
 import os
 import requests
 import base64
+from mailersend import emails
 
 
 class AyarlarPenceresi:
@@ -15,7 +16,7 @@ class AyarlarPenceresi:
 
         self.ayarlar_penceresi = tk.Toplevel(parent)
         self.ayarlar_penceresi.title("Ayarlar")
-        self.ayarlar_penceresi.geometry("250x150")
+        self.ayarlar_penceresi.geometry("300x250")
 
         self.label_eski_sifre = tk.Label(self.ayarlar_penceresi, text="Mevcut Şifre:", font=("Helvetica", 11))
         self.label_eski_sifre.grid(row=0, column=0)
@@ -27,15 +28,29 @@ class AyarlarPenceresi:
         self.entry_yeni_sifre = tk.Entry(self.ayarlar_penceresi, show="*", font=("Helvetica", 11))
         self.entry_yeni_sifre.grid(row=1, column=1)
 
-        self.buton_kaydet = tk.Button(self.ayarlar_penceresi, text="Kaydet", command=self.sifre_degistir, font=("Helvetica", 11))
+        self.buton_kaydet = tk.Button(self.ayarlar_penceresi, text="Şifre Kaydet", command=self.sifre_degistir,
+                                      font=("Helvetica", 11))
         self.buton_kaydet.grid(row=2, column=0, columnspan=2)
 
         self.cekirdek_frame = tk.Frame(self.ayarlar_penceresi, height=10, bd=5, relief="sunken")
         self.cekirdek_frame.grid(row=3, column=0, padx=5, pady=5)
 
-        self.buton_guncelle = tk.Button(self.ayarlar_penceresi, text="Uygumalamayı Güncelle", command=self.githubdan_guncelle,
-                                      font=("Helvetica", 11))
-        self.buton_guncelle.grid(row=4, column=0, columnspan=2)
+        self.label_eposta = tk.Label(self.ayarlar_penceresi, text="E-posta Adresi:", font=("Helvetica", 11))
+        self.label_eposta.grid(row=4, column=0)
+        self.entry_eposta = tk.Entry(self.ayarlar_penceresi, font=("Helvetica", 11))
+        self.entry_eposta.grid(row=4, column=1)
+
+        self.buton_eposta_kaydet = tk.Button(self.ayarlar_penceresi, text="E-posta Kaydet", command=self.eposta_kaydet,
+                                             font=("Helvetica", 11))
+        self.buton_eposta_kaydet.grid(row=5, column=0, columnspan=2)
+
+        self.cekirdek_frame = tk.Frame(self.ayarlar_penceresi, height=10, bd=5, relief="sunken")
+        self.cekirdek_frame.grid(row=6, column=0, padx=5, pady=5)
+
+        self.buton_guncelle = tk.Button(self.ayarlar_penceresi, text="Uygumalamayı Güncelle",
+                                        command=self.githubdan_guncelle,
+                                        font=("Helvetica", 11))
+        self.buton_guncelle.grid(row=7, column=0, columnspan=2)
 
     def sifre_degistir(self):
         eski_sifre = self.entry_eski_sifre.get()
@@ -51,6 +66,13 @@ class AyarlarPenceresi:
         else:
             messagebox.showerror("Hata", "Mevcut şifreyi yanlış girdiniz.")
 
+    def eposta_kaydet(self):
+        eposta = self.entry_eposta.get()
+
+        self.cursor.execute("UPDATE kullanici SET eposta=?", (eposta,))
+        self.baglanti.commit()
+        messagebox.showinfo("Başarılı", "E-posta başarıyla kaydedildi.")
+        self.ayarlar_penceresi.destroy()
 
     def githubdan_guncelle(self):
         # GitHub API'si aracılığıyla kod deposundan en son sürümü almak için istek gönder
@@ -107,7 +129,8 @@ class AjandaUygulamasi:
         self.entry_sifre = tk.Entry(self.giris_penceresi, show="*", font=("Helvetica", 11))
         self.entry_sifre.grid(row=0, column=1)
 
-        self.buton_giris = tk.Button(self.giris_penceresi, text="Giriş", command=self.giris_kontrol, font=("Helvetica", 11))
+        self.buton_giris = tk.Button(self.giris_penceresi, text="Giriş", command=self.giris_kontrol,
+                                     font=("Helvetica", 11))
         self.buton_giris.grid(row=1, column=0, columnspan=2)
 
         self.veritabani_yolu = os.path.join(os.path.dirname(__file__), "ajanda.db")
@@ -128,7 +151,8 @@ class AjandaUygulamasi:
     def uygulama_ac(self):
         self.ajanda = Ajanda(self.cursor, self.baglanti)
 
-        self.buton_ayarlar = tk.Button(self.pencere, text="Ayarlar", command=self.ayarlar_ac, font=("Helvetica", 11), fg="red")
+        self.buton_ayarlar = tk.Button(self.pencere, text="Ayarlar", command=self.ayarlar_ac, font=("Helvetica", 11),
+                                       fg="red")
         self.buton_ayarlar.grid(row=0, column=0, columnspan=2)
 
         self.cekirdek_frame = tk.Frame(self.pencere, height=10, bd=5, relief="sunken")
@@ -146,7 +170,8 @@ class AjandaUygulamasi:
         self.cekirdek_frame = tk.Frame(self.pencere, height=2, bd=5, relief="sunken")
         self.cekirdek_frame.grid(row=5, column=1, padx=5, pady=5)
 
-        self.buton_not_ekle = tk.Button(self.pencere, text="Not Ekle", command=self.not_ekle, font=("Helvetica", 11), fg="blue")
+        self.buton_not_ekle = tk.Button(self.pencere, text="Not Ekle", command=self.not_ekle, font=("Helvetica", 11),
+                                        fg="blue")
         self.buton_not_ekle.grid(row=6, column=0, columnspan=2)
 
         self.cekirdek_frame = tk.Frame(self.pencere, height=10, bd=5, relief="sunken")
@@ -167,20 +192,28 @@ class AjandaUygulamasi:
         self.cekirdek_frame = tk.Frame(self.pencere, height=10, bd=5, relief="sunken")
         self.cekirdek_frame.grid(row=10, column=1, padx=5, pady=5)
 
+        self.buton_eposta_gonder = tk.Button(self.pencere, text="E-posta Gönder", command=self.eposta_gonder,
+                                             font=("Helvetica", 11))
+        self.buton_eposta_gonder.grid(row=11, column=0, columnspan=2)
+
+        self.cekirdek_frame = tk.Frame(self.pencere, height=10, bd=5, relief="sunken")
+        self.cekirdek_frame.grid(row=12, column=1, padx=5, pady=5)
+
         self.label_sil_not_index = tk.Label(self.pencere, text="Silinecek Notun Numarası:", font=("Helvetica", 11))
-        self.label_sil_not_index.grid(row=11, column=0, columnspan=2)
+        self.label_sil_not_index.grid(row=13, column=0, columnspan=2)
 
         self.entry_sil_index = tk.Entry(self.pencere, width=5)
-        self.entry_sil_index.grid(row=12, column=0, columnspan=2)
+        self.entry_sil_index.grid(row=14, column=0, columnspan=2)
 
-        self.buton_not_sil = tk.Button(self.pencere, text="Notu Sil", command=self.not_sil, font=("Helvetica", 11), fg="red")
-        self.buton_not_sil.grid(row=13, column=0, columnspan=2)
+        self.buton_not_sil = tk.Button(self.pencere, text="Notu Sil", command=self.not_sil, font=("Helvetica", 11),
+                                       fg="red")
+        self.buton_not_sil.grid(row=15, column=0, columnspan=2)
 
         self.cekirdek_frame = tk.Frame(self.pencere, height=15, bd=5, relief="sunken")
-        self.cekirdek_frame.grid(row=14, column=1, padx=5, pady=5)
+        self.cekirdek_frame.grid(row=16, column=1, padx=5, pady=5)
 
         self.label_sil_not_index = tk.Label(self.pencere, text="by M. DEMİRAY 2024 V.1.1", font=("Helvetica", 8))
-        self.label_sil_not_index.grid(row=15, column=0, columnspan=2)
+        self.label_sil_not_index.grid(row=17, column=0, columnspan=2)
 
         # Uygulama kapatıldığında veritabanı bağlantısını kapat
         self.pencere.protocol("WM_DELETE_WINDOW", self.pencere_kapatildi)
@@ -221,6 +254,67 @@ class AjandaUygulamasi:
     def ayarlar_ac(self):
         AyarlarPenceresi(self.pencere, self.cursor, self.baglanti)
 
+    def eposta_gonder(self):
+        tarih = self.tarih_secici.get_date()
+        notlar = self.ajanda.getir_tum_notlar(tarih)
+        eposta_adresi = self.cursor.execute("SELECT eposta FROM kullanici").fetchone()[0]
+
+        if notlar:
+            self.notlari_eposta_gonder(notlar, eposta_adresi)
+        else:
+            messagebox.showinfo("E-posta Gönderme", "Belirtilen tarihte herhangi bir not bulunamadı.")
+
+
+    def notlari_eposta_gonder(self, notlar, eposta_adresi):
+        tarih = self.tarih_secici.get_date()
+        subject = f"Ajanda Notları - {tarih}"
+        api_key = "mlsn.99270aea84ed98093d1ea7b23e036a6ef7c5e72d5fe419ad138c7a76878a2d39"
+        mailer = emails.NewEmail(api_key)
+
+        # Notların başına indeksleri ekleyerek yeni notlar listesini oluştur
+        yeni_notlar = [f'<p>{indeks}: {not_metni}</p>' for indeks, not_metni in enumerate(notlar, start=0)]
+
+        # E-posta içeriği
+        body = "<br>".join(yeni_notlar)
+
+        mail_body = {}
+
+        # E-posta gönderme işlemi
+        try:
+
+            # E-posta oluşturma
+            mail_from = {
+                "name": "Ajanda Not Defteri",
+                "email": "",
+            }
+            recipients = [
+                {
+                    "name": "Hocam",
+                    "email": f"{eposta_adresi}",
+                }
+            ]
+
+            reply_to = [
+                {
+                    "name": "Ajanda Not Defteri",
+                    "email": "ajandanotdefteri@gmail.com",
+                }
+            ]
+
+            mailer.set_mail_from(mail_from, mail_body)
+            mailer.set_mail_to(recipients, mail_body)
+            mailer.set_subject(f"{subject}", mail_body)
+            mailer.set_html_content(f"{body}", mail_body)
+            mailer.set_plaintext_content(f"{body}", mail_body)
+            mailer.set_reply_to(reply_to, mail_body)
+
+            mailer.send(mail_body)
+
+            messagebox.showinfo("Başarılı",
+                                f"Seçilen tarihin notları başarıyla {eposta_adresi} adresine gönderildi.")
+        except Exception as e:
+            messagebox.showerror("Hata", f"E-posta gönderme sırasında bir hata oluştu: {str(e)}")
+
 
 class Ajanda:
     def __init__(self, cursor, baglanti):
@@ -230,6 +324,10 @@ class Ajanda:
         self.veritabanini_yukle()
 
     def veritabanini_yukle(self):
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS notlar (tarih TEXT, not_metni TEXT)")
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS kullanici (id INTEGER PRIMARY KEY, sifre TEXT, eposta TEXT)")
+        self.baglanti.commit()
+
         self.cursor.execute("SELECT tarih, not_metni FROM notlar")
         rows = self.cursor.fetchall()
         for row in rows:
@@ -265,18 +363,25 @@ class Ajanda:
         else:
             print("Belirtilen tarihte not bulunamadı.")
 
+    def getir_tum_notlar(self, tarih):
+        if tarih in self.notlar:
+            return self.notlar[tarih]
+        else:
+            return None
+
 
 # Kullanıcı bilgilerini içeren tablonun oluşturulması
 def kullanici_tablosunu_olustur(cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS kullanici (
                             id INTEGER PRIMARY KEY,
-                            sifre TEXT
+                            sifre TEXT,
+                            eposta TEXT
                         )''')
 
 
 # Kullanıcı bilgilerini tabloya ekleme
 def kullanici_ekle(cursor, baglanti):
-    cursor.execute("INSERT OR IGNORE INTO kullanici (id, sifre) VALUES (?, ?)", (1, "12345"))
+    cursor.execute("INSERT OR IGNORE INTO kullanici (id, sifre, eposta) VALUES (?, ?, ?)", (1, "12345", ""))
     baglanti.commit()
 
 
